@@ -5,11 +5,10 @@
     <vendor>jwbargsten</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-
-    <resource-bundle>messages.MyBundle</resource-bundle>
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.jwbargsten.envinject.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.jwbargsten.envinject.startup.MyProjectActivity" />
+        <runConfigurationExtension implementation="com.github.jwbargsten.envinject.EnvInjectRunConfigurationExtension"/>
+        <notificationGroup id="env-inject" displayType="BALLOON"/>
     </extensions>
 </idea-plugin>
