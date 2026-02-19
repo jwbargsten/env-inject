@@ -64,11 +64,11 @@ PUBLISH_TOKEN={publish_token}""")
 
 ## Screenshots
 
-![./docs/Screenshot01.png]
-
-![./docs/Screenshot02.png]
-
-![./docs/Screenshot03.png]
+![./docs/Screenshot01.png](./docs/Screenshot01.png)
+                                                    
+![./docs/Screenshot02.png](./docs/Screenshot02.png)
+                                                    
+![./docs/Screenshot03.png](./docs/Screenshot03.png)
 
 
 ## Building
