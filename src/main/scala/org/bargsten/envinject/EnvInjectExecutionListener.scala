@@ -15,7 +15,9 @@ class EnvInjectExecutionListener extends ExecutionListener:
 
   override def processStartScheduled(executorId: String, env: ExecutionEnvironment): Unit =
     env.getRunProfile match
-      case config: ExternalSystemRunConfiguration if EnvInjectResolver(env.getProject).configExists() =>
+      case config: ExternalSystemRunConfiguration
+          if EnvInjectToggleState.getInstance(env.getProject).isEnabled
+            && EnvInjectResolver(env.getProject).configExists() =>
         val settings = config.getSettings
         val originalEnv = new java.util.HashMap(settings.getEnv)
         savedEnvs.put(env.getExecutionId, originalEnv)

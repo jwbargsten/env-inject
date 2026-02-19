@@ -20,7 +20,8 @@ class EnvInjectRunConfigurationExtension extends RunConfigurationExtension:
       applicableConfiguration: RunConfigurationBase[?],
       runnerSettings: RunnerSettings | Null
   ): Boolean =
-    EnvInjectResolver(applicableConfiguration.getProject).configExists()
+    val project = applicableConfiguration.getProject
+    EnvInjectToggleState.getInstance(project).isEnabled && EnvInjectResolver(project).configExists()
 
   override def updateJavaParameters[T <: RunConfigurationBase[?]](
       configuration: T,

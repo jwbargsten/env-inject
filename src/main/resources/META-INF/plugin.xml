@@ -15,6 +15,13 @@
         <notificationGroup id="env-inject.warnings" displayType="BALLOON"/>
     </extensions>
 
+    <actions>
+        <action id="org.bargsten.envinject.Toggle"
+                class="org.bargsten.envinject.EnvInjectToggleAction"
+                text="Inject Environment from .env-inject"
+                description="Toggle environment variable injection for this project"/>
+    </actions>
+
     <projectListeners>
         <listener class="org.bargsten.envinject.EnvInjectExecutionListener"
                   topic="com.intellij.execution.ExecutionListener"/>
