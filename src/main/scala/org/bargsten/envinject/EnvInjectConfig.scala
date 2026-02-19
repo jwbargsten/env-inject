@@ -4,9 +4,15 @@ import com.intellij.openapi.project.Project
 import org.bargsten.envinject.EnvInjectConfig.FileName
 
 import java.nio.file.{Files, Path}
+import scala.annotation.targetName
 import scala.jdk.CollectionConverters.*
 
 case class CmdSpec(cmd: Seq[String], wd: String)
+object CmdSpec:
+  def fromCmd(cmd: Seq[String]): CmdSpec = CmdSpec(cmd, ".")
+
+  @targetName("fromCmdVarargs")
+  def fromCmd(cmd: String*): CmdSpec = CmdSpec(cmd, ".")
 
 class EnvInjectConfig(project: Project):
   private val workingDir: Option[String] = Option(project.getBasePath)

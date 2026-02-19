@@ -3,7 +3,6 @@ package org.bargsten.envinject
 import com.intellij.openapi.diagnostic.Logger
 
 import java.io.File
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Await, ExecutionContext, Future, blocking}
 import scala.jdk.CollectionConverters.*
 import scala.util.{Failure, Success, Try, Using}
@@ -16,9 +15,9 @@ final case class CommandExecutionError(cmd: CmdSpec, stderr: String = "", cause:
 
 object ExternalCommandRunner:
   private val logger = Logger.getInstance(getClass)
-  private val Timeout = 7.seconds
+  private val DefaultTimeout = 7.seconds
 
-  def run(cmdSpec: CmdSpec): Either[CommandExecutionError, Map[String, String]] = {
+  def run(cmdSpec: CmdSpec, timeout: Duration = DefaultTimeout)(using ExecutionContext): Either[CommandExecutionError, Map[String, String]] = {
     val result = Try {
       val pb = new ProcessBuilder(cmdSpec.cmd.asJava)
       pb.directory(new File(cmdSpec.wd))
@@ -44,7 +43,7 @@ object ExternalCommandRunner:
         stderr <- stderrF
       yield (stdout, stderr, exit)
 
-      Try(Await.result(combinedF, Timeout)) match {
+      Try(Await.result(combinedF, timeout)) match {
         case Success((stdout, stderr, exitValue)) if exitValue == 0 =>
           Right(parseOutput(stdout))
         case Success((stdout, stderr, exitValue)) =>

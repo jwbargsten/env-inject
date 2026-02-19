@@ -1,16 +1,9 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>org.bargsten.envinject</id>
     <name>EnvInject</name>
     <vendor>Joachim Bargsten</vendor>
 
-    <description><![CDATA[
-        Injects environment variables into JVM Run Configurations (Java, Kotlin, Scala)
-        by executing an external command before launch. The command outputs <code>KEY=VALUE</code>
-        lines to stdout, which get merged into the process environment.
-        Configuration is per-project via a <code>.env-inject</code> file in the project root.
-
-    ]]></description>
+    <description>Will be patched by Gradle task patchPluginXml!</description>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>

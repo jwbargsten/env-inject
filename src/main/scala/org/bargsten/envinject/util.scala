@@ -6,6 +6,9 @@ object util {
 
   extension (xs: Seq[String])
     def spacesep(): String = xs.mkString(" ")
+    def commasep(): String = xs.mkString(", ")
 
+  extension (xs: Set[String])
+    def spacesep(): String = xs.mkString(" ")
     def commasep(): String = xs.mkString(", ")
 }

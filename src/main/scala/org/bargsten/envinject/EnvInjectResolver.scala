@@ -4,9 +4,12 @@ import com.intellij.notification.{NotificationGroupManager, NotificationType}
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import org.bargsten.envinject.util.widen
-import util.{spacesep, commasep}
+import util.{commasep, spacesep}
+
+import scala.concurrent.ExecutionContext
 
 class EnvInjectResolver(project: Project):
+  private given ec: ExecutionContext = ExecutionContext.Implicits.global
 
   private val logger = Logger.getInstance(getClass)
   private val config = EnvInjectConfig(project)
@@ -23,7 +26,7 @@ class EnvInjectResolver(project: Project):
     else
       val mergedEnv = cmds
         .map(_.widen[shlex.TokenizeError | CommandExecutionError])
-        .map(_.flatMap(ExternalCommandRunner.run))
+        .map(_.flatMap(ExternalCommandRunner.run(_)))
         .map {
           case Left(err: shlex.TokenizeError) =>
             showWarning(s"could not parse cmd: ${err.cmd}")
