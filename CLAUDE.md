@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-IntelliJ plugin (written in Scala 3) that injects environment variables into JVM Run Configurations by executing an external command before launch. The command is configured per-project via a `.env-inject` file in the project root.
+IntelliJ plugin (Scala 3) that injects environment variables into JVM Run Configurations by executing external commands before launch. Commands are configured per-project via a `.env-inject` file in the project root.
 
 ## Build Commands
 
@@ -19,13 +19,14 @@ Requires Java 21. Uses Gradle 9.3.1 with configuration cache and build cache ena
 
 ## Architecture
 
-Three Scala 3 source files in `src/main/scala/com/github/jwbargsten/envinject/`:
+Four Scala 3 source files in `src/main/scala/org/bargsten/envinject/`:
 
-- **EnvInjectRunConfigurationExtension** — The core plugin class. Extends IntelliJ's `RunConfigurationExtension` to hook into JVM launch. Checks for `.env-inject` file existence (`isEnabledFor`), then runs the external command and merges `KEY=VALUE` pairs into `JavaParameters` (`updateJavaParameters`).
-- **EnvInjectConfig** — Reads the `.env-inject` config file from the project root. Returns the first non-empty, non-comment line as the command to execute.
-- **ExternalCommandRunner** — Executes the shell command as a subprocess with a 10-second timeout. Parses stdout lines in `KEY=VALUE` format into a `Map[String, String]`.
+- **EnvInjectRunConfigurationExtension** — The core plugin class. Extends IntelliJ's `RunConfigurationExtension` to hook into JVM launch. Checks for `.env-inject` file existence (`isEnabledFor`), then runs all configured commands, merges their `KEY=VALUE` output, and injects the result into `JavaParameters`. Shows balloon notifications on failure.
+- **EnvInjectConfig** — Reads the `.env-inject` config file from the project root. Returns all non-empty, non-comment lines as commands to execute (supports multiple commands).
+- **ExternalCommandRunner** — Executes shell commands as subprocesses with a 7-second timeout. Uses `shlex.split` to tokenize the command string, then parses stdout lines in `KEY=VALUE` format into a `Map[String, String]`.
+- **shlex** — POSIX shell-style command tokenizer (port of Python's `shlex.split`). Handles single/double quotes, backslash escaping, comments, and whitespace splitting. Also provides `shlex.quote`.
 
-The plugin is registered via `src/main/resources/META-INF/plugin.xml` as a `runConfigurationExtension`. It depends on `com.intellij.modules.java`.
+The plugin is registered via `src/main/resources/META-INF/plugin.xml` as a `runConfigurationExtension` with a `notificationGroup` for balloon warnings. It depends on `com.intellij.modules.java`.
 
 ## Key Configuration
 
