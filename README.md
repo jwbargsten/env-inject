@@ -10,6 +10,11 @@ environment. Configuration is per-project via a `.env-inject` file in the
 project root.
 
 This is useful for AI coding agents so they cannot upload your secrets by accident.
+
+By default the env injection is disabled. Enable it via a toggle action in e.g. Search Everywhere:
+
+<kbd>Tab</kbd> & <kbd>Tab</kbd> ([Search Everywhere](https://www.jetbrains.com/help/idea/searching-everywhere.html)) > <kbd>Inject Environment from .env-inject</kbd>
+
 <!-- Plugin description end -->
 
 ## Usage
@@ -65,10 +70,12 @@ PUBLISH_TOKEN={publish_token}""")
 ## Screenshots
 
 ![./docs/Screenshot01.png](./docs/Screenshot01.png)
-                                                    
+
 ![./docs/Screenshot02.png](./docs/Screenshot02.png)
-                                                    
+
 ![./docs/Screenshot03.png](./docs/Screenshot03.png)
+
+![./docs/Screenshot04.png](./docs/Screenshot04.png)
 
 
 ## Building
