@@ -29,7 +29,6 @@ repositories {
 dependencies {
     implementation(libs.scala3.library)
 
-    testImplementation(libs.junit)
     testImplementation(libs.opentest4j)
     testImplementation(libs.scala.munit)
 
