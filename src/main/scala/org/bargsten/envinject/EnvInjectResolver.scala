@@ -4,6 +4,7 @@ import com.intellij.notification.{NotificationGroupManager, NotificationType}
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import org.bargsten.envinject.util.widen
+import util.{spacesep, commasep}
 
 class EnvInjectResolver(project: Project):
 
@@ -29,15 +30,15 @@ class EnvInjectResolver(project: Project):
             Map.empty
           case Left(err: CommandExecutionError) =>
             logger.warn(s"failed with ex env-inject: ${err.cmd}: ${err.stderr}", err.cause.orNull)
-            if err.stderr.isBlank then showWarning(s"could not execute cmd: ${err.cmd.cmd}")
-            else showWarning(s"could not execute cmd: ${err.cmd.cmd}, stderr: ${err.stderr}")
+            if err.stderr.isBlank then showWarning(s"could not execute cmd: ${err.cmd.cmd.spacesep()}")
+            else showWarning(s"could not execute cmd: ${err.cmd.cmd.spacesep()}, stderr: ${err.stderr}")
             Map.empty
           case Right(value) => value
         }
         .reduce(_ ++ _)
 
       val keys = mergedEnv.keys.toSet
-      showInfo(s"injected ${keys.mkString(",")}")
+      if keys.nonEmpty then showInfo(s"injected ${keys.commasep()}")
       mergedEnv
 
   private def showWarning(message: String): Unit =

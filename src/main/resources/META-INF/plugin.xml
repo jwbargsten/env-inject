@@ -10,8 +10,6 @@
         lines to stdout, which get merged into the process environment.
         Configuration is per-project via a <code>.env-inject</code> file in the project root.
 
-        This is useful for AI coding agents so they cannot upload your secrets that might linger as
-        plain text in your project.
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>

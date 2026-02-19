@@ -8,6 +8,9 @@ IntelliJ plugin that injects environment variables into JVM Run Configurations
 outputs `KEY=VALUE` lines to stdout, which get merged into the process
 environment. Configuration is per-project via a `.env-inject` file in the
 project root.
+
+This is useful for AI coding agents so they cannot upload your secrets that might 
+linger as plain text in your project.
 <!-- Plugin description end -->
 
 ## Usage
