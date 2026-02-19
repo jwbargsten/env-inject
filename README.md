@@ -3,24 +3,27 @@
 ![Build](https://github.com/jwbargsten/env-inject/workflows/Build/badge.svg)
 
 <!-- Plugin description -->
-IntelliJ plugin that injects environment variables into JVM Run Configurations
-(Java, Kotlin, Scala) by calling an external command before launch. The command
-outputs `KEY=VALUE` lines to stdout, which get merged into the process
-environment. Configuration is per-project via a `.env-inject` file in the
-project root.
+
+IntelliJ plugin that injects environment variables into JVM Run Configurations (Java,
+Kotlin, Scala) by calling an external command before launch. The command outputs
+`KEY=VALUE` lines to stdout, which get merged into the process environment.
+Configuration is per-project via a `.env-inject` file in the project root.
 
 This is useful for AI coding agents so they cannot upload your secrets by accident.
 
-By default the env injection is disabled. Enable it via a toggle action in e.g. Search Everywhere:
+By default the env injection is disabled. Enable it via a toggle action in e.g. Search
+Everywhere:
 
-<kbd>Tab</kbd> & <kbd>Tab</kbd> ([Search Everywhere](https://www.jetbrains.com/help/idea/searching-everywhere.html)) > <kbd>Inject Environment from .env-inject</kbd>
+<kbd>Tab</kbd> & <kbd>Tab</kbd>
+([Search Everywhere](https://www.jetbrains.com/help/idea/searching-everywhere.html)) >
+<kbd>Inject Environment from .env-inject</kbd>
 
 <!-- Plugin description end -->
 
 ## Usage
 
-Create a `.env-inject` file in your project root. The first non-empty,
-non-comment line is the command to execute:
+Create a `.env-inject` file in your project root. The first non-empty, non-comment line
+is the command to execute:
 
 ```
 # Command that outputs KEY=VALUE lines to stdout
@@ -77,6 +80,14 @@ PUBLISH_TOKEN={publish_token}""")
 
 ![./docs/Screenshot04.png](./docs/Screenshot04.png)
 
+## Running it via the shell
+
+`.env-inject` is basically a shell script, so you can run it via the terminal, too. I
+have `script/env-inject` as helper script in place:
+
+```bash
+export $(env-inject | xargs)
+```
 
 ## Building
 
@@ -88,6 +99,7 @@ The plugin zip is written to `build/distributions/env-inject-<version>.zip`.
 
 ## Installation
 
-<kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>gear icon</kbd> > <kbd>Install Plugin from Disk...</kbd> > select the zip from `build/distributions/`
+<kbd>Settings</kbd> > <kbd>Plugins</kbd> > <kbd>gear icon</kbd> > <kbd>Install Plugin
+from Disk...</kbd> > select the zip from `build/distributions/`
 
 Restart the IDE after installation.

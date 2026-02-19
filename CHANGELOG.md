@@ -9,6 +9,7 @@
 ### Added
 
 - Toggle button to switch env-inject on/off
+- Added `script/env-inject` for shell interoperability
 - Tests
 
 ## [0.0.1-alpha.1] - 2026-02-19
