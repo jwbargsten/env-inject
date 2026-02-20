@@ -26,6 +26,48 @@ repositories {
     }
 }
 
+sourceSets {
+    main {
+        scala {
+            setSrcDirs(listOf("src/main/scala"))
+        }
+        resources {
+            setSrcDirs(listOf("src/main/resources"))
+        }
+    }
+
+    create("integrationTest") {
+        scala {
+            srcDir("src/integrationTest/scala")
+            compileClasspath += sourceSets.main.get().output
+            runtimeClasspath += sourceSets.main.get().output
+        }
+        resources.srcDir("src/integrationTest/resources")
+
+    }
+}
+
+
+// https://plugins.jetbrains.com/docs/intellij/integration-tests-intro.html#creating-the-first-integration-test
+val integrationTestImplementation by configurations.getting {
+    extendsFrom(configurations.testImplementation.get())
+}
+val integrationTestRuntimeOnly by configurations.getting {
+    extendsFrom(configurations.testRuntimeOnly.get())
+
+}
+//configurations["integrationTestRuntimeOnly"].extendsFrom(configurations.testRuntimeOnly.get())
+
+val integrationTest by intellijPlatformTesting.testIdeUi.registering {
+    task {
+        val integrationTestSourceSet = sourceSets.getByName("integrationTest")
+        testClassesDirs = integrationTestSourceSet.output.classesDirs
+        classpath = integrationTestSourceSet.runtimeClasspath
+        useJUnitPlatform()
+    }
+}
+
+
 dependencies {
     implementation(libs.scala3.library)
 
@@ -38,7 +80,13 @@ dependencies {
         plugins(providers.gradleProperty("platformPlugins").map { it.split(',') })
         bundledModules(providers.gradleProperty("platformBundledModules").map { it.split(',') })
         testFramework(TestFrameworkType.Platform)
+        testFramework(TestFrameworkType.Starter, configurationName = "integrationTestImplementation")
     }
+    integrationTestImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
+    integrationTestImplementation("org.kodein.di:kodein-di-jvm:7.20.2")
+    integrationTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.1")
+    integrationTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 }
 
 intellijPlatform {
@@ -132,17 +180,6 @@ intellijPlatformTesting {
             plugins {
                 robotServerPlugin()
             }
-        }
-    }
-}
-
-sourceSets {
-    main {
-        scala {
-            setSrcDirs(listOf("src/main/scala"))
-        }
-        resources {
-            setSrcDirs(listOf("src/main/resources"))
         }
     }
 }
