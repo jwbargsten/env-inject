@@ -20,6 +20,12 @@ Everywhere:
 
 <!-- Plugin description end -->
 
+## Timeout
+
+Each command has a 7-second timeout. If a command doesn't complete in time, it is
+killed and the run configuration launches without those env vars. A warning balloon
+is shown in the IDE.
+
 ## Usage
 
 Create a `.env-inject` file in your project root. The first non-empty, non-comment line
