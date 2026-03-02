@@ -3,7 +3,13 @@ import shlex
 import re
 import subprocess as sp
 from pathlib import Path
+import argparse
 
+def build_parser():
+    p = argparse.ArgumentParser()
+    p.add_argument("-0", "--null-separated", action="store_true")
+    p.add_argument("-e","--prefix-with-export", action="store_true")
+    return p
 
 def run_cmd(cmd: list[str]):
     res = sp.run(
@@ -20,6 +26,8 @@ def quote(line):
     return "{}={}".format(k, shlex.quote(v))
 
 
+args = build_parser().parse_args()
+
 cmds = [
     shlex.split(cmd)
     for cmd in Path(".env-inject").read_text().splitlines()
@@ -32,4 +40,13 @@ for cmd in cmds:
     stmts_unquoted.extend(stdout.decode("utf-8").splitlines())
 
 stmts = [quote(x) for x in stmts_unquoted if not re.match(r"\s*(#|$)", x)]
-print("\n".join(stmts))
+
+if args.prefix_with_export:
+    stmts = [f"export {s}" for s in stmts]
+
+if args.null_separated:
+    sep = "\0"
+else:
+    sep = "\n"
+
+print(sep.join(stmts))
