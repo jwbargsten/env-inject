@@ -1,22 +1,37 @@
 #!/usr/bin/env python
+# pyright: basic
 import shlex
+import os
 import re
 import subprocess as sp
 from pathlib import Path
 import argparse
 
+TIMEOUT_SEC=7
+
 def build_parser():
-    p = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(required=True)
+
+    p = sub.add_parser("print")
     p.add_argument("-0", "--null-separated", action="store_true")
-    p.add_argument("-e","--prefix-with-export", action="store_true")
-    return p
+    p.add_argument("-e", "--prefix-with-export", action="store_true")
+    p.set_defaults(func=cmd_print)
+
+    p = sub.add_parser("exec")
+    p.add_argument("-p", "--pass-parent-env", action="store_true")
+    p.add_argument("cmd", nargs="+")
+    p.set_defaults(func=cmd_exec)
+
+    return parser
+
 
 def run_cmd(cmd: list[str]):
     res = sp.run(
         cmd,
         capture_output=True,
         check=True,
-        timeout=7,
+        timeout=TIMEOUT_SEC,
     )
     return res.stdout
 
@@ -26,27 +41,56 @@ def quote(line):
     return "{}={}".format(k, shlex.quote(v))
 
 
-args = build_parser().parse_args()
+def run_env_inject():
+    cmds = [
+        shlex.split(cmd)
+        for cmd in Path(".env-inject").read_text().splitlines()
+        if not re.match(r"\s*(#|$)", cmd)
+    ]
 
-cmds = [
-    shlex.split(cmd)
-    for cmd in Path(".env-inject").read_text().splitlines()
-    if not re.match(r"\s*(#|$)", cmd)
-]
+    stmts_unquoted = []
+    for cmd in cmds:
+        stdout = run_cmd(cmd)
+        stmts_unquoted.extend(stdout.decode("utf-8").splitlines())
 
-stmts_unquoted = []
-for cmd in cmds:
-    stdout = run_cmd(cmd)
-    stmts_unquoted.extend(stdout.decode("utf-8").splitlines())
+    return [x for x in stmts_unquoted if not re.match(r"\s*(#|$)", x)]
 
-stmts = [quote(x) for x in stmts_unquoted if not re.match(r"\s*(#|$)", x)]
 
-if args.prefix_with_export:
-    stmts = [f"export {s}" for s in stmts]
+def cmd_print(args):
+    stmts_unquoted = run_env_inject()
 
-if args.null_separated:
-    sep = "\0"
-else:
-    sep = "\n"
+    stmts = [quote(x) for x in stmts_unquoted]
 
-print(sep.join(stmts))
+    if args.prefix_with_export:
+        stmts = [f"export {s}" for s in stmts]
+
+    if args.null_separated:
+        sep = "\0"
+    else:
+        sep = "\n"
+
+    print(sep.join(stmts))
+
+
+def cmd_exec(args):
+    stmts_unquoted = run_env_inject()
+
+    env = {}
+    for stmt in stmts_unquoted:
+        key, value = stmt.split("=", 1)
+        env[key] = value
+
+    if args.pass_parent_env:
+        env = {**os.environ, **env}
+
+    os.execvpe(args.cmd[0], args.cmd, env)
+
+
+def main():
+    parser = build_parser()
+    args = parser.parse_args()
+    args.func(args)
+
+
+if __name__ == "__main__":
+    main()

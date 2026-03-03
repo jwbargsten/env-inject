@@ -91,9 +91,18 @@ PUBLISH_TOKEN={publish_token}""")
 `.env-inject` is basically a shell script, so you can run it via the terminal, too. I
 have `script/env-inject` as helper script in place:
 
-```bash
-export $(env-inject | xargs)
 ```
+$ ./script/env-inject --help                                                                                                                                                               (main)
+usage: env-inject [-h] {print,exec} ...
+
+positional arguments:
+  {print,exec}
+
+options:
+  -h, --help    show this help message and exit
+```
+
+It can act as a wrapper (`exec`) or print the env vars (`print`).
 
 ## Building
 
