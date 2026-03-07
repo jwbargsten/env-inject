@@ -29,7 +29,9 @@ class EnvInjectRunConfigurationExtension extends RunConfigurationExtension:
       runnerSettings: RunnerSettings | Null
   ): Unit =
     val env = EnvInjectResolver(configuration.getProject).resolve()
-    env.foreach { (k, v) => params.addEnv(k, v) }
+    val merged = new java.util.HashMap(params.getEnv)
+    env.foreach { (k, v) => merged.put(k, v) }
+    params.setEnv(merged)
 
     configuration match
       case esrc: ExternalSystemRunConfiguration =>

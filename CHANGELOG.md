@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix UnsupportedOperationException when injecting env vars into run configurations with unmodifiable env maps (e.g. ZIO tests)
+
 ## [0.0.1-alpha.2] - 2026-02-19
 
 ### Added
