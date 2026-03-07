@@ -19,7 +19,6 @@ def build_parser():
     p.set_defaults(func=cmd_print)
 
     p = sub.add_parser("exec")
-    p.add_argument("-p", "--pass-parent-env", action="store_true")
     p.add_argument("cmd", nargs="+")
     p.set_defaults(func=cmd_exec)
 
@@ -80,8 +79,7 @@ def cmd_exec(args):
         key, value = stmt.split("=", 1)
         env[key] = value
 
-    if args.pass_parent_env:
-        env = {**os.environ, **env}
+    env = {**os.environ, **env}
 
     os.execvpe(args.cmd[0], args.cmd, env)
 
