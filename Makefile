@@ -1,6 +1,6 @@
 dist:
-	@export $$(script/env-inject | xargs) && ./gradlew clean patchChangelog buildPlugin signPlugin
+	@script/env-inject exec ./gradlew clean patchChangelog buildPlugin signPlugin
 
 publish:
-	@export $$(script/env-inject | xargs) && ./gradlew clean publishPlugin
+	@script/env-inject exec ./gradlew clean publishPlugin
 

@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-03-07
+
 ### Fixed
 
 - Fix UnsupportedOperationException when injecting env vars into run configurations with unmodifiable env maps (e.g. ZIO tests)
@@ -22,6 +24,7 @@
 
 - Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
 
-[Unreleased]: https://github.com/jwbargsten/env-inject/compare/0.0.1-alpha.2...HEAD
+[Unreleased]: https://github.com/jwbargsten/env-inject/compare/0.0.2...HEAD
+[0.0.2]: https://github.com/jwbargsten/env-inject/compare/0.0.1-alpha.2...0.0.2
 [0.0.1-alpha.2]: https://github.com/jwbargsten/env-inject/compare/0.0.1-alpha.1...0.0.1-alpha.2
 [0.0.1-alpha.1]: https://github.com/jwbargsten/env-inject/commits/0.0.1-alpha.1
