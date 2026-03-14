@@ -2,6 +2,7 @@ package org.bargsten.envinject
 
 import com.intellij.openapi.components.{PersistentStateComponent, Service, State, Storage}
 import com.intellij.openapi.project.Project
+import scala.beans.BeanProperty
 
 @State(name = "EnvInjectToggleState", storages = Array(new Storage("env-inject.xml")))
 @Service(Array(Service.Level.PROJECT))
@@ -22,4 +23,4 @@ object EnvInjectToggleState:
     project.getService(classOf[EnvInjectToggleState])
 
   class State:
-    var enabled: Boolean = false
+    @BeanProperty var enabled: Boolean = false

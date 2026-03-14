@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [0.0.3] - 2026-03-14
+
+### Added
+
+- Persist env-inject toggle state across IDE restarts
+
 ## [0.0.2] - 2026-03-07
 
 ### Fixed
@@ -24,7 +30,8 @@
 
 - Initial scaffold created from [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template)
 
-[Unreleased]: https://github.com/jwbargsten/env-inject/compare/0.0.2...HEAD
+[Unreleased]: https://github.com/jwbargsten/env-inject/compare/0.0.3...HEAD
+[0.0.3]: https://github.com/jwbargsten/env-inject/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/jwbargsten/env-inject/compare/0.0.1-alpha.2...0.0.2
 [0.0.1-alpha.2]: https://github.com/jwbargsten/env-inject/compare/0.0.1-alpha.1...0.0.1-alpha.2
 [0.0.1-alpha.1]: https://github.com/jwbargsten/env-inject/commits/0.0.1-alpha.1

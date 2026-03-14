@@ -10,6 +10,7 @@
     <depends>com.intellij.gradle</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="org.bargsten.envinject.EnvInjectToggleState"/>
         <runConfigurationExtension implementation="org.bargsten.envinject.EnvInjectRunConfigurationExtension"/>
         <notificationGroup id="env-inject.info" displayType="NONE"/>
         <notificationGroup id="env-inject.warnings" displayType="BALLOON"/>
