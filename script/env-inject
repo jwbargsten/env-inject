@@ -7,7 +7,7 @@ import subprocess as sp
 from pathlib import Path
 import argparse
 
-TIMEOUT_SEC=7
+TIMEOUT_SEC=120
 
 def build_parser():
     parser = argparse.ArgumentParser()
